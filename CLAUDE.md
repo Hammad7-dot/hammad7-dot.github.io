@@ -13,7 +13,7 @@ There is no build, lint, or test tooling. To preview locally, just open the HTML
 ## Structure
 
 - `index.html`, `work.html`, `about.html`, `contact.html` — top-level pages.
-- `case-*.html` — individual case study pages (one per project: CrediShield, Healthcare Co-Pilot, Weather ETL dashboard). New case studies follow this same `case-<slug>.html` naming and structure.
+- `case-*.html` — individual case study pages (one per project: CrediShield, Healthcare Co-Pilot, Weather ETL dashboard, Crypto Analytics, Docket RAG API). New case studies follow this same `case-<slug>.html` naming and structure.
 - `assets/css/style.css` — single shared stylesheet for the entire site (no per-page CSS, no preprocessor).
 - `assets/img/` — screenshots and demo GIFs referenced by case study pages.
 

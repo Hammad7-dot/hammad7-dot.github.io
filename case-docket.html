@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Docket — AI Document Q&A RAG API — Hammad</title>
+<meta name="description" content="Docket — a FastAPI + LangChain + pgvector RAG API for document Q&A, with a static frontend, deploying to Railway and Cloudflare Pages.">
+<link rel="canonical" href="https://hammad7-dot.github.io/case-docket.html">
+<link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Docket — AI Document Q&A RAG API — Hammad">
+<meta property="og:description" content="Docket — a FastAPI + LangChain + pgvector RAG API for document Q&A, with a static frontend, deploying to Railway and Cloudflare Pages.">
+<meta property="og:url" content="https://hammad7-dot.github.io/case-docket.html">
+<meta property="og:image" content="https://hammad7-dot.github.io/assets/img/hero-bg.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Docket — AI Document Q&A RAG API — Hammad">
+<meta name="twitter:description" content="Docket — a FastAPI + LangChain + pgvector RAG API for document Q&A, with a static frontend, deploying to Railway and Cloudflare Pages.">
+<meta name="twitter:image" content="https://hammad7-dot.github.io/assets/img/hero-bg.png">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-left">
+    <div class="nav-badge"><span>H</span></div>
+    <span class="nav-name">Hammad</span>
+  </a>
+  <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">Menu</button>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="work.html" aria-current="page">Work</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<header class="wrap case-hero">
+  <p class="eyebrow">Case 05 · Retrieval-augmented systems</p>
+  <h1>Docket — AI Document Q&A RAG API</h1>
+  <div class="case-meta">
+    <span><strong>Stack:</strong> FastAPI, LangChain, pgvector, Postgres, Redis</span>
+    <span><strong>Role:</strong> Solo build</span>
+    <span><a href="https://github.com/Hammad7-dot/AI-Document-Q-A-API-RAG-" target="_blank" rel="noopener">See the repo →</a></span>
+  </div>
+</header>
+
+<section class="wrap">
+
+  <div class="case-block">
+    <h2>The problem</h2>
+    <p>Answering questions against a pile of documents usually means either reading them by hand or wiring up retrieval and generation yourself: chunking, embeddings, a vector store, and a model that actually cites what it read instead of guessing. I wanted a real, self-hosted RAG API — not a notebook demo — that could take documents in, index them properly, and answer questions against them through a clean HTTP interface.</p>
+  </div>
+
+  <div class="case-block">
+    <h2>What I did</h2>
+    <p>Built <strong>Docket</strong>: a FastAPI backend that ingests documents, chunks and embeds them with LangChain, and stores the vectors in Postgres via pgvector, with Redis in front for caching. A static HTML frontend (also called Docket) gives it a usable interface for uploading documents and asking questions, rather than requiring API calls by hand. The backend and frontend are deployed separately by design: FastAPI/Postgres/Redis need a persistent server, so the backend targets Railway (specifically a pgvector-enabled Postgres template, not the plain one), while the static frontend deploys independently to Cloudflare Pages.</p>
+    <div class="case-media" style="max-width:640px;">
+      <img src="assets/img/docket-demo.gif" alt="Docket sign-in screen — authenticated flow for asking questions grounded in your own PDFs" loading="lazy">
+      <p class="media-caption">Real screen recording — Docket's auth flow, gating document Q&A behind a signed-in account.</p>
+    </div>
+  </div>
+
+  <div class="case-block">
+    <h2>Fixing it for real, not just building it once</h2>
+    <p>Getting this to a state where it actually reproduces from a clean clone took seven rounds of real fixes: a validation error handler, embedding dimension mismatches between the model and the pgvector column, stale tests, an Ollama healthcheck that wasn't checking anything, a Python 3.13/numpy version pin that broke installs, and pushing <code>document_service.py</code> test coverage to 100%. The seventh fix — resizing embeddings back to 1024 dimensions once Cohere was settled on as the production embedding provider — is packaged as a migration, ready to apply once deployment starts.</p>
+  </div>
+
+  <div class="case-block">
+    <h2>How it's built, no mystery code</h2>
+    <p>Upload flow: a document comes in through the FastAPI endpoint, gets chunked, embedded (Cohere in production), and the vectors land in a pgvector column on Postgres. Query flow: a question gets embedded the same way, pgvector does a similarity search to pull the relevant chunks, and LangChain assembles them into a prompt for the answer. Redis sits in front of repeat lookups so the same query isn't re-embedded and re-searched every time. The frontend talks to the backend over a plain <code>API_BASE</code> URL and CORS is scoped to whichever origin it's actually served from — no wildcard origins once it's live.</p>
+  </div>
+
+  <div class="case-block">
+    <h2>The honest gap</h2>
+    <div class="gap-note">Working end-to-end in local/dev — sign-in, auth, and the document Q&A flow all run, as shown above. Not on a public URL yet: the migration for fix #7, the Railway deploy, and wiring <code>API_BASE</code>/<code>CORS_ORIGINS</code> to the live frontend host are still outstanding. This case study will get a live demo link the moment that ships — the write-up above is accurate to what's built and running today, not what's planned.</div>
+  </div>
+
+</section>
+
+<nav class="wrap case-nav">
+  <a href="case-crypto-analytics.html">← Real-Time Crypto Analytics Platform</a>
+</nav>
+
+<footer>
+  <div class="wrap">
+    <p>© 2026 Hammad. Built by hand, HTML/CSS, no framework.</p>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/muhammad-hammad-khan-036618394/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/Hammad7-dot" target="_blank" rel="noopener">GitHub</a>
+      <a href="assets/Hammad_Resume.pdf" target="_blank" rel="noopener">Resume (PDF)</a>
+    </div>
+    <a href="contact.html">Get in touch →</a>
+  </div>
+</footer>
+
+</body>
+</html>
