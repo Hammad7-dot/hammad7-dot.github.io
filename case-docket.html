@@ -56,7 +56,7 @@
     <h2>What I did</h2>
     <p>Built <strong>Docket</strong>: a FastAPI backend that ingests documents, chunks and embeds them with LangChain, and stores the vectors in Postgres via pgvector, with Redis in front for caching. A static HTML frontend (also called Docket) gives it a usable interface for uploading documents and asking questions, rather than requiring API calls by hand. The backend and frontend are deployed separately by design: FastAPI/Postgres/Redis need a persistent server, so the backend targets Railway (specifically a pgvector-enabled Postgres template, not the plain one), while the static frontend deploys independently to Cloudflare Pages.</p>
     <div class="case-media" style="max-width:640px;">
-      <img src="assets/img/docket-demo.gif" alt="Docket sign-in screen — authenticated flow for asking questions grounded in your own PDFs" loading="lazy">
+      <img src="assets/img/docket_demo_1.4x.gif" alt="Docket sign-in screen — authenticated flow for asking questions grounded in your own PDFs" loading="lazy">
       <p class="media-caption">Real screen recording — Docket's auth flow, gating document Q&A behind a signed-in account.</p>
     </div>
   </div>
